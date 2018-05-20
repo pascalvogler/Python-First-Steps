@@ -1,3 +1,5 @@
+from random import randint
+
 #BASIC ANIMAL CLASS
 class Basic_Form:
     
@@ -41,25 +43,15 @@ class Physical_Animal(Basic_Form):
         self.dexterity = dexterity
         self.strength = strength
         self.stamina = stamina
+        self.life = self.life_multiplicator * self.stamina
+        self.attack_power = self.attack_power_multiplicator * self.strength + self.attack_power_multiplicator * self.dexterity
+        self.spell_power = 0
         if enemy is None:
             self.enemy = []
         else:
             self.enemy = enemy
         
         Physical_Animal.physical_population += 1
- 
-        #calculates total health of animal   
-    def life(self):
-        self.life = self.life_multiplicator * self.stamina
-        return self.life
-    
-    #calculates attack power of animal
-    def attack_power(self):
-        self.attack_p = self.attack_power_multiplicator * self.strength + self.attack_power_multiplicator * self.dexterity
-        return self.attack_p
-    
-    def spell_power(self):
-        return 0
     
     def enemy_name(self):
         for i in self.enemy:
@@ -87,6 +79,9 @@ class Spell_Animal(Basic_Form):
         super().__init__(name, type, subtype, lore, food)
         self.intelligence = intelligence
         self.stamina = stamina
+        self.life = self.life_multiplicator * self.stamina
+        self.attack_power = 0
+        self.spell_power = self.spell_power_multiplicator * self.intelligence
         if enemy is None:
             self.enemy = []
         else:
@@ -94,18 +89,6 @@ class Spell_Animal(Basic_Form):
         
         Spell_Animal.spell_population += 1
         
-    #calculates total health of animal   
-    def life(self):
-        self.life = self.life_multiplicator * self.stamina
-        return self.life
-       
-    def attack_power(self):
-        return 0
-    
-    #calculates spell power of animal
-    def spell_power(self):
-        self.spell_p = self.spell_power_multiplicator * self.intelligence
-        return self.spell_p
     
     def enemy_name(self):
         for i in self.enemy:
@@ -124,6 +107,7 @@ class Spell_Animal(Basic_Form):
                 else:
                     return self.name + " probably loses against " + i.name
 
+
     
 #INSTANCES LEVEL 1 BASIC FORM       
 animal_1 = Basic_Form("Vittorio","Dinosaur", "Jungle", "Tapfere Octagon Kämpfer!","Meat")
@@ -138,6 +122,7 @@ physical_2 = Physical_Animal("Sabretooth","Mamal (Non human)", "Mountain", "Swif
 physical_3 = Physical_Animal("Silverback","Mamal (Non human)", "Jungle", "Ancient Monkey-Species that can get extremely tall and powerfull.", "Plants", 90, 25, 90, 95, [])
 physical_4 = Physical_Animal("Shaman","Human", "Forest", "Spiritual Guide of a whole people. Can control the spirits around him.", "Plants", 18, 5, 5, 20, [])
 physical_5 = Physical_Animal("Skyblade", "Dragon", "Mountain", "Small Dragon species, inhabiting the hightest Mountains. The Name Skyblade comes from its sharp and thin body structure.", "Meat", 45, 45, 60, 50, [])
+physical_animals = [physical_1, physical_2, physical_3, physical_4, physical_5]
 
 #INSTANCES LEVEL 2 SPELL ANIMALS
 spell_1 = Spell_Animal("Spell-Raptor","Dinosaur", "Jungle", "This is a very fast and dangerous beast that uses its highly evolved brain to track down its pray and kill it with its sharp claws.","Meat",60,30, [])
@@ -145,11 +130,23 @@ spell_2 = Spell_Animal("Magical Sabretooth","Mamal (Non human)", "Mountain", "Sw
 spell_3 = Spell_Animal("Silverback","Mamal (Non human)", "Jungle", "Ancient Monkey-Species that can get extremely tall and powerfull.", "Plants", 45,95, [])
 spell_4 = Spell_Animal("Shaman","Human", "Forest", "Spiritual Guide of a whole people. Can control the spirits around him.", "Plants", 100, 20, [])
 spell_5 = Spell_Animal("Skyblade", "Dragon", "Mountain", "Small Dragon species, inhabiting the hightest Mountains. The Name Skyblade comes from its sharp and thin body structure.", "Meat", 70, 50, [])
+spell_animals = [spell_1, spell_2, spell_3, spell_4, spell_5]
 
+all_animals = physical_animals+spell_animals
 
+def spawnAnimal(type='r'):
+  ''' takes type as string 'p' or 's'
+  returns a random animal from the respective type, or random from all types
+  if no type is given'''
+  if type == 'r':
+    return all_animals[randint(0,len(all_animals)-1)]
+  if type == 'p':
+    return physical_animals[randint(0,len(physical_animals)-1)]
+  if type == 's':
+    return spell_animals[randint(0,len(spell_animals)-1)]
 
 
 #Fightcode
 
-spell_2.enemy.append(physical_1)
-print(spell_2.enemy_estimate())
+#spell_2.enemy.append(physical_1)
+#print(spell_2.enemy_estimate())
